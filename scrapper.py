@@ -3,6 +3,28 @@ import requests
 import urllib
 import os
 from os.path import basename
+import sys
+
+def sav(i,url):
+    filename = "random/frame"+str(i)+".png"
+    urllib.urlretrieve(url,filename)
+def sav1(url,filename):
+    urllib.urlretrieve(url,filename)    
+def ran():
+    if not os.path.exists("random"):
+        os.makedirs("random")  
+    url = "http://explosm.net/rcg";
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html5lib')
+    #print(soup)
+    links = soup.find('div',class_="rcg-panels")
+    #print(links)
+    im = links.find_all('img')
+    i = 1;    
+    for img in im:
+        sav(i,img['src'])
+        #print(img['src'])
+        i+=1         
 def func(str):
     if(str=="January"):
         return 1
@@ -30,10 +52,30 @@ def func(str):
         return 12           
 f = open("inp.txt","r")
 s = f.readline()
+st =  s.split()
+if(st[0]=="random"):
+    ran()
+    sys.exit()
+if(st[0]=="latest"):
+    if not os.path.exists("latest"):
+        os.makedirs("latest")
+    num = int(st[1])
+    url = "http://explosm.net"
+    for i in range(1,num+1):
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, 'html5lib')
+        na = soup.find('div', id="comic-author").contents
+        ka = na[2].split()
+        links = soup.find('img',id="main-comic")
+        link = "http:"+links['src']
+        sav1(link,"latest"+"/"+na[0][4:]+"-"+ka[1]+".png")
+        re = soup.find('a' , class_ = "nav-previous")
+        url = "http://explosm.net"+re['href']
+    sys.exit()    
+
 e = f.readline()
 c = f.readline()
 creators = c.split()
-st =  s.split()
 en = e.split()
 m1 = func(st[0])
 m2 = func(en[0])
@@ -61,15 +103,17 @@ def parse(month , year):
         url+="0"
     url+=str(month)
     for cre in creators:
+        krl = url
         url+="/"
         url+=cre
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'html5lib')
-    links = soup.findAll('div',class_="row collapse")
-    for img in links: 
-        cre = img.find('div')
-        cro = cre.find('a')
-        store(month,year,"http://explosm.net"+cro['href'])
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, 'html5lib')
+        links = soup.findAll('div',class_="row collapse")
+        for img in links: 
+            cre = img.find('div')
+            cro = cre.find('a')
+            store(month,year,"http://explosm.net"+cro['href'])
+        url = krl    
 path =  os.getcwd() 
 while(y1<=y2):
     if not os.path.exists(str(y1)):
