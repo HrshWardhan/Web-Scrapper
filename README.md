@@ -8,3 +8,7 @@ Sample Input
 June 2017
 December 2018
 dave
+
+use "random" to download from random comic generator
+
+use "latest n" to download n latest comics
