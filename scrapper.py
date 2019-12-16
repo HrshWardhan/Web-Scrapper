@@ -47,11 +47,11 @@ def store(month,year,url):
     imgUrl = imgUrp['src']
     sur = url
     url="http:"+imgUrl
-    print(imgUrl)
+    #print(imgUrl)
     response = requests.get(url)
-    filename = sur.split('/')[-2]+".png"
+    filename = str(year)+"/"+sur.split('/')[-2]+".png"
     #filename = str(year)+"/"+str(month)+"/"+sur.split('/')[-2]+".png"
-    print(filename)
+    #print(filename)
     urllib.urlretrieve(url,filename)
 def parse(month , year):
     url = "http://explosm.net/comics/archive/"+str(year)+"/";
@@ -70,7 +70,8 @@ def parse(month , year):
         store(month,year,"http://explosm.net"+cro['href'])
     #print(soup.prettify())
 while(y1<=y2):
-    #os.mkdir(str(y1))
+    if not os.path.exists(str(y1)):
+        os.makedirs(str(y1))
     if(y1==sto):
         for i in range(m1,13):
             #os.mkdir(str(y1)+"/"+str(i))
