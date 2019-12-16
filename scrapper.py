@@ -49,8 +49,10 @@ def store(month,year,url):
     url="http:"+imgUrl
     #print(imgUrl)
     response = requests.get(url)
-    filename = str(year)+"/"+sur.split('/')[-2]+".png"
+    na = soup.find('div', id="comic-author").contents
+    ka = na[2].split()
     #filename = str(year)+"/"+str(month)+"/"+sur.split('/')[-2]+".png"
+    filename = str(year)+"/"+str(month)+"/"+na[0][4:]+"-"+ka[1]+".png"
     #print(filename)
     urllib.urlretrieve(url,filename)
 def parse(month , year):
@@ -68,18 +70,30 @@ def parse(month , year):
         cre = img.find('div')
         cro = cre.find('a')
         store(month,year,"http://explosm.net"+cro['href'])
-    #print(soup.prettify())
+path =  os.getcwd() 
 while(y1<=y2):
     if not os.path.exists(str(y1)):
-        os.makedirs(str(y1))
+        os.makedirs(str(y1))    
     if(y1==sto):
         for i in range(m1,13):
-            #os.mkdir(str(y1)+"/"+str(i))
+            os.chdir(path+"/"+str(y1))
+            if not os.path.exists(str(i)):
+                os.makedirs(str(i))
+            os.chdir(path)    
             parse(i,y1)
+            
     elif(y1==y2):
         for i in range(1,13):
+            os.chdir(path+"/"+str(y1))
+            if not os.path.exists(str(i)):
+                os.makedirs(str(i))
+            os.chdir(path)    
             parse(i,y1)
     else:
         for i in range(1,m2+1):
+            os.chdir(path+"/"+str(y1))
+            if not os.path.exists(str(i)):
+                os.makedirs(str(i))
+            os.chdir(path)    
             parse(i,y1) 
     y1+=1            
