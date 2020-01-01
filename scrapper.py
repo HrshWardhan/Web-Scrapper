@@ -28,7 +28,7 @@ def ran():
 def func(str):
     if(str=="January"):
         return 1
-    elif(str=="Feburaury"):
+    elif(str=="February"):
         return 2
     elif(str=="March"):
         return 3    
